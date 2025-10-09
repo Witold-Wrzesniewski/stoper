@@ -1,4 +1,5 @@
-
+import './styles/normalize.scss';
+import './styles/global.scss';
 
 function App() {
   return (
