@@ -3,15 +3,20 @@ import Button from '../Button/Button';
 import { useState } from 'react';
 
 const Stoper = () => {
-  const [time, setTime] = useState({
+  const time = new Date();
+  const [startTime, setStartTime] = useState(time.getTime());
+  const [currentTime, setCurrentTime] = useState({
     hours: 0,
     minutes: 0,
     seconds: 0,
     milliseconds: 0
   });
+  /*const timer = setInterval(() => {
+    newTime(time.getTime() - startTime);
+  }, 1000);*/
 
   const newTime = (increment) => {
-    let [milliseconds, seconds, minutes, hours] = [time.milliseconds, time.seconds, time.minutes, time.hours];
+    let [milliseconds, seconds, minutes, hours] = [currentTime.milliseconds, currentTime.seconds, currentTime.minutes, currentTime.hours];
 
     milliseconds += increment;
     if (milliseconds > 999) {
@@ -20,14 +25,14 @@ const Stoper = () => {
     }
     if (seconds > 59) {
       minutes += Math.floor(seconds / 60);
-      seconds = seconds & 60;
+      seconds = seconds % 60;
     }
     if (minutes > 59) {
       hours += Math.floor(minutes / 60);
       minutes = minutes % 60;
     }
 
-    setTime({
+    setCurrentTime({
       hours: hours,
       minutes: minutes,
       seconds: seconds,
@@ -37,12 +42,13 @@ const Stoper = () => {
 
   return(
     <>
-      <div className={styles.stoper}>{time.hours < 10 ? '0' + time.hours : time.hours}:
-        {time.minutes < 10 ? '0' + time.minutes : time.minutes}:
-        {time.seconds < 10 ? '0' + time.seconds : time.seconds}.
-        {time.milliseconds < 100 ? (time.milliseconds < 10 ? '00' + time.milliseconds : '0' + time.milliseconds) : time.milliseconds}</div>
+      <div className={styles.stoper}>{currentTime.hours < 10 ? '0' + currentTime.hours : currentTime.hours}:
+        {currentTime.minutes < 10 ? '0' + currentTime.minutes : currentTime.minutes}:
+        {currentTime.seconds < 10 ? '0' + currentTime.seconds : currentTime.seconds}.
+        {currentTime.milliseconds < 100 ? (currentTime.milliseconds < 10 ? '00' + currentTime.milliseconds : '0' + currentTime.milliseconds) : currentTime.milliseconds}</div>
+        <div className={styles.stoper}>{time.getTime()}</div>
       <section className={styles.buttonsSection}>
-        <Button>Start</Button>
+        <Button action={() => newTime(1000)}>Start</Button>
         <Button>Stop</Button>
         <Button>Reset</Button>
       </section>
