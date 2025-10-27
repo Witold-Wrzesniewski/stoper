@@ -4,24 +4,45 @@ import Display from '../Display/Display';
 import { useState, useEffect } from 'react';
 
 const Stoper = () => {
-  const [startTime, setStartTime] = useState(new Date().getTime());
-  const [currentTime, setCurrentTime] = useState(new Date().getTime());
+  const [startTime, setStartTime] = useState(0);
+  const [currentTime, setCurrentTime] = useState(0);
   const [timer, setTimer] = useState(null);
 
   useEffect(() => {
-    setTimer(setInterval(() => setCurrentTime(new Date().getTime()), 1000));
     return () => {
       if(timer) clearInterval(timer);
     };
   }, []);
 
+  let stopTime = startTime;
+
+  const handleStart = () => {
+    setStartTime(prevTime => prevTime + new Date().getTime() - stopTime)
+    setTimer(setInterval(() => setCurrentTime(new Date().getTime()), 1000));
+  };
+
+  const handleStop = () => {
+    if(timer) {
+      stopTime = new Date().getTime();
+      clearInterval(timer);
+      //setTimer(null);
+    }
+  };
+
+  const handleReset = () => {
+    setStartTime(0);
+    setCurrentTime(0);
+    clearInterval(timer);
+    setTimer(null);
+  }
+
   return(
     <>
       <Display time={currentTime - startTime} />
       <section className={styles.buttonsSection}>
-        <Button>Start</Button>
-        <Button>Stop</Button>
-        <Button>Reset</Button>
+        <Button action={handleStart}>Start</Button>
+        <Button action={handleStop}>Stop</Button>
+        <Button action={handleReset}>Reset</Button>
       </section>
     </>)
 };

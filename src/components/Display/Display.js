@@ -1,6 +1,6 @@
 import styles from './Display.module.scss';
 
-const Display = (props) => {
+const Display = ({time}) => {
   const formatedTime = (time) => {
     let milliseconds = time, seconds = 0, minutes = 0, hours = 0;
 
@@ -24,7 +24,6 @@ const Display = (props) => {
       milliseconds: milliseconds
     };
   };
-  const time = props.time;
 
   return(
     <div className={styles.display}>{formatedTime(time).hours < 10 ? '0' + formatedTime(time).hours : formatedTime(time).hours}:
